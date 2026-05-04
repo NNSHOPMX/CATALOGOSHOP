@@ -564,8 +564,8 @@
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
-    <!-- WhatsApp Flotante -->
-    <a href="https://wa.me/526442252598" class="whatsapp-float" target="_blank">
+    <!-- WhatsApp Flotante con el nuevo mensaje personalizado -->
+    <a href="https://wa.me/526442252598?text=Hola%20%F0%9F%91%8B%20vi%20tu%20cat%C3%A1logo%20de%20NNSHOPMX%0AMe%20interesa%20un%20producto%2C%20%C2%BFme%20puedes%20dar%20m%C3%A1s%20informaci%C3%B3n%3F%20%F0%9F%99%8C" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -715,12 +715,12 @@
 
         // PRODUCTOS
         const products = [
-            { id: 1, name: "Camisa Boss Negra", type: "camisa", price: 199, img: "img/Foto1.jpg", gallery: ["img/Foto1.jpg", "img/Foto1.jpg"] },
-            { id: 2, name: "Camisa Hugo", type: "camisa", price: 199, img: "img/Foto3.jpg",   gallery: ["img/Foto3.jpg", "img/Foto3.jpg"] },
-            { id: 3, name: "Camisa Hugo Roja", type: "camisa", price: 199, img: "img/Foto2.jpg", gallery: ["img/Foto2.jpg", "img/Foto2.jpg"] },
-            { id: 4, name: "Gorra 2", type: "gorra", price: 849, img: "img/Gorra2.jpg", gallery: ["img/Gorra2.jpg", "img/Gorra2.jpg"] },
-            { id: 5, name: "Gorra 1", type: "gorra", price: 849, img: "img/Gorra1.jpg", gallery: ["img/Gorra1.jpg", "img/Gorra1.jpg"] },
-            { id: 6, name: "Gorra 3", type: "gorra", price: 849, img: "img/Gorra3.jpg", gallery: ["img/Gorra3.jpg", "img/Gorra3.jpg"] }
+            { id: 1, name: "Camisa Boss Negra", type: "camisa", price: 199, img: "img/Foto1.jpg", gallery: ["img/Foto1.jpg"], color: "Negro" },
+            { id: 2, name: "Camisa Hugo", type: "camisa", price: 199, img: "img/Foto3.jpg",   gallery: ["img/Foto3.jpg"], color: "Blanco/Azul" },
+            { id: 3, name: "Camisa Hugo Roja", type: "camisa", price: 199, img: "img/Foto2.jpg", gallery: ["img/Foto2.jpg"], color: "Rojo" },
+            { id: 4, name: "Gorra 2", type: "gorra", price: 849, img: "img/Gorra2.jpg", gallery: ["img/Gorra2.jpg"], color: "Negro" },
+            { id: 5, name: "Gorra 1", type: "gorra", price: 849, img: "img/Gorra1.jpg", gallery: ["img/Gorra1.jpg"], color: "Gris" },
+            { id: 6, name: "Gorra 3", type: "gorra", price: 849, img: "img/Gorra3.jpg", gallery: ["img/Gorra3.jpg"], color: "Azul" }
         ];
 
         let cart = [];
@@ -732,7 +732,6 @@
         const modal = document.getElementById('product-modal');
 
         function init() {
-            // CARGAR PERSISTENCIA LOCALSTORAGE
             const savedCart = localStorage.getItem('nn_cart');
             if(savedCart) {
                 cart = JSON.parse(savedCart);
@@ -741,7 +740,6 @@
             updateCart();
         }
 
-        // Zoom Logic
         function zoomIn(e) {
             const img = document.getElementById('modal-img');
             const container = document.getElementById('zoom-container');
@@ -920,22 +918,22 @@
             else sidebar.classList.toggle('active');
         }
 
+        // Función Checkout con el nuevo mensaje personalizado solicitado
         function checkout() {
             if(cart.length === 0) return alert("Tu carrito está vacío");
-            const customerName = document.getElementById('customer-name').value.trim();
-            const nameText = customerName ? `Cliente: *${customerName}*` : "Nuevo Pedido";
-            let message = `*ORDEN DE COMPRA - NN SHOP MX* ⚜️\n`;
-            message += `------------------------------------------\n`;
-            message += `👤 ${nameText}\n\n`;
-            message += `🛍️ *Detalle de Productos:*\n`;
-            cart.forEach((item, i) => {
-                message += `${i+1}. *${item.name}*\n   ▫️ Cantidad: ${item.qty}\n   ▫️ Talla: ${item.size}\n   ▫️ Subtotal: $${item.price * item.qty}\n\n`;
+            
+            let message = `Hola 👋 vengo del catálogo de NNSHOPMX\n`;
+            message += `Quiero confirmar este pedido:\n\n`;
+            
+            cart.forEach((item) => {
+                message += `🧢 Producto: ${item.name}\n`;
+                message += `📏 Talla: ${item.size}\n`;
+                message += `🎨 Color: ${item.color || 'No especificado'}\n`;
+                message += `🔢 Cantidad: ${item.qty}\n\n`;
             });
-            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            message += `------------------------------------------\n`;
-            message += `💰 *TOTAL A PAGAR: $${total}*\n`;
-            message += `------------------------------------------\n\n`;
-            message += `📍 Quedo a la espera de los métodos de pago y confirmación de stock. ¡Gracias!`;
+            
+            message += `¿Me confirmas disponibilidad y precio final? 🙌`;
+            
             const encoded = encodeURIComponent(message);
             window.open(`https://wa.me/526442252598?text=${encoded}`, '_blank');
         }
