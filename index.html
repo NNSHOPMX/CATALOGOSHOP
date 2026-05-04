@@ -51,6 +51,14 @@
             letter-spacing: 5px;
             animation: pulse 2s infinite;
         }
+        /* Estilo para el logo en el loader */
+        .loader-logo-img {
+            width: 180px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
         @keyframes pulse {
             0% { opacity: 0.5; transform: scale(0.95); }
             50% { opacity: 1; transform: scale(1); }
@@ -71,10 +79,18 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
             font-family: 'Cinzel', serif;
             color: white;
             font-size: 1.5rem;
             letter-spacing: 3px;
+        }
+
+        /* Estilo para el logo en la nav */
+        .logo-img {
+            height: 50px;
+            margin-right: 15px;
         }
 
         .logo span { color: var(--accent); }
@@ -552,6 +568,8 @@
     <!-- Pantalla de Carga -->
     <div id="loader">
         <div class="loader-content">
+            <!-- AGREGADO: Logo en el loader -->
+            <img src="img/LogoNN.jpg" alt="NN SHOP MX LOGO" class="loader-logo-img">
             <div class="loader-logo">NN SHOP <span>MX</span></div>
             <p style="color: var(--accent); margin-top: 10px; font-size: 0.7rem; letter-spacing: 3px;">CARGANDO CALIDAD...</p>
         </div>
@@ -571,7 +589,11 @@
 
     <!-- Navegación -->
     <nav>
-        <div class="logo">NN SHOP <span>MX</span></div>
+        <div class="logo">
+            <!-- AGREGADO: Logo en la navegación -->
+            <img src="img/LogoNN.jpg" alt="NN SHOP MX" class="logo-img">
+            NN SHOP <span>MX</span>
+        </div>
         <div class="nav-actions">
             <div class="search-container">
                 <input type="text" placeholder="Buscar..." class="search-input" id="search-input" oninput="handleSearch()">
