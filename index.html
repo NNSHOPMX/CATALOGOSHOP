@@ -466,6 +466,29 @@
         }
         .whatsapp-float:hover { transform: scale(1.1); background: #128C7E; }
 
+        /* --- NOTIFICACIÓN DE ÉXITO --- */
+        #toast-notification {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-left: 4px solid var(--accent);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            z-index: 10001;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideInToast 0.4s ease-out;
+        }
+
+        @keyframes slideInToast {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         footer {
             background: var(--primary);
             color: #888;
@@ -533,6 +556,9 @@
             <p style="color: var(--accent); margin-top: 10px; font-size: 0.7rem; letter-spacing: 3px;">CARGANDO CALIDAD...</p>
         </div>
     </div>
+
+    <!-- Mensaje de Éxito -->
+    <div id="toast-notification">¡PRODUCTO AGREGADO CON ÉXITO!</div>
 
     <!-- Cursor Personalizado -->
     <div class="cursor-dot"></div>
@@ -827,6 +853,14 @@
 
         function closeModal() { modal.style.display = 'none'; }
 
+        function showSuccessToast() {
+            const toast = document.getElementById('toast-notification');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
         function addToCart(product) {
             const existingIndex = cart.findIndex(item => item.id === product.id && item.size === selectedSize);
             if(existingIndex > -1) {
@@ -836,7 +870,7 @@
             }
             updateCart();
             closeModal();
-            toggleCart(true);
+            showSuccessToast();
         }
 
         function updateCart() {
