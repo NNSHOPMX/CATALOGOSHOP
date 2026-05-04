@@ -318,8 +318,8 @@
         .modal-details h2 { font-family: 'Cinzel', serif; margin-bottom: 10px; font-size: 1.8rem; }
         .modal-price { font-size: 1.5rem; color: var(--accent); margin-bottom: 20px; font-weight: 700; }
         
-        .size-selector { margin-bottom: 30px; }
-        .size-selector p { font-size: 0.8rem; text-transform: uppercase; font-weight: 600; margin-bottom: 10px; }
+        .size-selector { margin-bottom: 20px; }
+        .size-selector p, .qty-selector p { font-size: 0.8rem; text-transform: uppercase; font-weight: 600; margin-bottom: 10px; }
         .size-btns { display: flex; gap: 10px; flex-wrap: wrap; }
         
         .size-btn {
@@ -331,6 +331,19 @@
         }
 
         .size-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Estilos Cantidad */
+        .qty-selector { margin-bottom: 30px; }
+        .qty-controls { display: flex; align-items: center; gap: 15px; }
+        .qty-btn {
+            width: 35px; height: 35px;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .qty-btn:hover { background: var(--light-gray); }
+        #modal-qty-val { font-weight: bold; width: 20px; text-align: center; }
 
         .add-to-cart-btn {
             background: var(--primary);
@@ -374,6 +387,9 @@
         .cart-item img { width: 70px; height: 90px; object-fit: cover; }
         .cart-item-info h4 { font-size: 0.9rem; margin-bottom: 5px; }
         .cart-item-info p { font-size: 0.8rem; color: #777; }
+        
+        .cart-qty-inline { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        .btn-qty-small { border: 1px solid #ddd; background: white; width: 22px; height: 22px; font-size: 0.7rem; cursor: pointer; }
 
         .cart-footer { padding: 25px; background: #fafafa; border-top: 1px solid #eee; }
         
@@ -418,6 +434,7 @@
             margin-top: 50px;
         }
         .contact-item i { font-size: 2rem; color: var(--accent); margin-bottom: 15px; }
+        .contact-item h4 { margin-bottom: 5px; font-family: 'Cinzel', serif; }
         .contact-item a { text-decoration: none; color: inherit; font-weight: 500; font-size: 0.9rem; transition: 0.3s; }
         .contact-item a:hover { color: var(--accent); }
 
@@ -561,7 +578,7 @@
         </div>
     </div>
 
-    <!-- Modal Detalle Producto con Zoom -->
+    <!-- Modal Detalle Producto -->
     <div class="modal" id="product-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -575,10 +592,22 @@
                 <h2 id="modal-title"></h2>
                 <p id="modal-desc" style="margin-bottom: 15px; color: #666; line-height: 1.6;">Diseño exclusivo de nuestra nueva colección. Calidad premium garantizada.</p>
                 <p class="modal-price" id="modal-price"></p>
+                
                 <div class="size-selector" id="size-selector">
                     <p>Seleccionar Talla:</p>
                     <div class="size-btns" id="size-container"></div>
                 </div>
+
+                <!-- SELECTOR DE CANTIDAD MODAL -->
+                <div class="qty-selector">
+                    <p>Cantidad:</p>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateModalQty(-1)">-</button>
+                        <span id="modal-qty-val">1</span>
+                        <button class="qty-btn" onclick="updateModalQty(1)">+</button>
+                    </div>
+                </div>
+
                 <button class="add-to-cart-btn" id="add-btn">Agregar al Carrito</button>
             </div>
         </div>
@@ -627,7 +656,7 @@
                 <div class="contact-item">
                     <i class="fab fa-instagram"></i>
                     <h4>Instagram</h4>
-                    <a href="https://instagram.com/NNSHOPMX_09" target="_blank">@NNSHOPMX_09</a>
+                    <a href="https://instagram.com/nnshopmx_" target="_blank">@nnshopmx_</a>
                 </div>
                 <div class="contact-item">
                     <i class="fab fa-facebook"></i>
@@ -658,24 +687,32 @@
             }, 1000);
         });
 
+        // PRODUCTOS
         const products = [
-            { id: 1, name: "Camisa Boss", type: "camisa", price: 899, img: "img/Foto1.jpg", gallery: ["img/Foto1.jpg", "img/Foto1.jpg"] },
-            { id: 2, name: "Camisa Red Hugo", type: "gorra", price: 849, img: "img/Foto2.jpg", gallery: ["img/Foto2.jpg", "img/Foto2.jpg"] },
-            { id: 3, name: "Camisa Hugo", type: "camisa", price: 949, img: "img/Foto3.jpg",   gallery: ["img/Foto3.jpg", "img/Foto3.jpg"] },
-            { id: 4, name: "Gorra 1", type: "gorra", price: 849, img: "img/Gorra1.jpg", gallery: ["img/Gorra1.jpg", "img/Gorra1.jpg"] },
-            { id: 5, name: "Gorra 2", type: "camisa", price: 899, img: "img/Gorra2.jpg", gallery: ["img/Gorra2.jpg", "img/Gorra2.jpg"] },
+            { id: 1, name: "Camisa Boss Negra", type: "camisa", price: 199, img: "img/Foto1.jpg", gallery: ["img/Foto1.jpg", "img/Foto1.jpg"] },
+            { id: 2, name: "Camisa Hugo", type: "camisa", price: 199, img: "img/Foto3.jpg",   gallery: ["img/Foto3.jpg", "img/Foto3.jpg"] },
+            { id: 3, name: "Camisa Hugo Roja", type: "camisa", price: 199, img: "img/Foto2.jpg", gallery: ["img/Foto2.jpg", "img/Foto2.jpg"] },
+            { id: 4, name: "Gorra 2", type: "gorra", price: 849, img: "img/Gorra2.jpg", gallery: ["img/Gorra2.jpg", "img/Gorra2.jpg"] },
+            { id: 5, name: "Gorra 1", type: "gorra", price: 849, img: "img/Gorra1.jpg", gallery: ["img/Gorra1.jpg", "img/Gorra1.jpg"] },
             { id: 6, name: "Gorra 3", type: "gorra", price: 849, img: "img/Gorra3.jpg", gallery: ["img/Gorra3.jpg", "img/Gorra3.jpg"] }
         ];
 
         let cart = [];
         let selectedSize = "";
+        let currentModalQty = 1;
         let currentFilter = 'todos';
 
         const catalog = document.getElementById('catalog');
         const modal = document.getElementById('product-modal');
 
         function init() {
+            // CARGAR PERSISTENCIA LOCALSTORAGE
+            const savedCart = localStorage.getItem('nn_cart');
+            if(savedCart) {
+                cart = JSON.parse(savedCart);
+            }
             renderProducts(products);
+            updateCart();
         }
 
         // Zoom Logic
@@ -745,6 +782,9 @@
             document.getElementById('modal-price').innerText = `$${p.price}`;
             document.getElementById('modal-img').src = p.img;
             
+            currentModalQty = 1;
+            document.getElementById('modal-qty-val').innerText = currentModalQty;
+
             const thumbnailsContainer = document.getElementById('modal-thumbnails');
             thumbnailsContainer.innerHTML = p.gallery.map((gImg, idx) => `
                 <img src="${gImg}" class="thumb-img ${idx === 0 ? 'active-thumb' : ''}" onclick="changeMainImage('${gImg}', this)">
@@ -760,6 +800,12 @@
 
             document.getElementById('add-btn').onclick = () => addToCart(p);
             modal.style.display = 'flex';
+        }
+
+        function updateModalQty(val) {
+            currentModalQty += val;
+            if(currentModalQty < 1) currentModalQty = 1;
+            document.getElementById('modal-qty-val').innerText = currentModalQty;
         }
 
         function changeMainImage(src, element) {
@@ -782,7 +828,12 @@
         function closeModal() { modal.style.display = 'none'; }
 
         function addToCart(product) {
-            cart.push({...product, size: selectedSize});
+            const existingIndex = cart.findIndex(item => item.id === product.id && item.size === selectedSize);
+            if(existingIndex > -1) {
+                cart[existingIndex].qty += currentModalQty;
+            } else {
+                cart.push({...product, size: selectedSize, qty: currentModalQty});
+            }
             updateCart();
             closeModal();
             toggleCart(true);
@@ -793,7 +844,10 @@
             const count = document.getElementById('cart-count');
             const total = document.getElementById('cart-total');
             
-            count.innerText = cart.length;
+            localStorage.setItem('nn_cart', JSON.stringify(cart));
+            const totalArticles = cart.reduce((acc, item) => acc + item.qty, 0);
+            count.innerText = totalArticles;
+
             container.innerHTML = cart.map((item, index) => `
                 <div class="cart-item">
                     <img src="${item.img}">
@@ -801,13 +855,24 @@
                         <h4>${item.name}</h4>
                         <p>Talla: ${item.size}</p>
                         <p style="font-weight:bold; color:var(--accent)">$${item.price}</p>
-                        <button onclick="removeItem(${index})" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:0.7rem; margin-top:5px">Eliminar</button>
+                        <div class="cart-qty-inline">
+                            <button class="btn-qty-small" onclick="changeCartQty(${index}, -1)">-</button>
+                            <span style="font-size:0.8rem">${item.qty}</span>
+                            <button class="btn-qty-small" onclick="changeCartQty(${index}, 1)">+</button>
+                        </div>
+                        <button onclick="removeItem(${index})" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:0.7rem; margin-top:10px">Eliminar</button>
                     </div>
                 </div>
             `).join('');
 
-            const sum = cart.reduce((acc, item) => acc + item.price, 0);
+            const sum = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
             total.innerText = `$${sum}`;
+        }
+
+        function changeCartQty(index, val) {
+            cart[index].qty += val;
+            if(cart[index].qty < 1) removeItem(index);
+            else updateCart();
         }
 
         function removeItem(index) {
@@ -823,26 +888,20 @@
 
         function checkout() {
             if(cart.length === 0) return alert("Tu carrito está vacío");
-            
             const customerName = document.getElementById('customer-name').value.trim();
             const nameText = customerName ? `Cliente: *${customerName}*` : "Nuevo Pedido";
-            
             let message = `*ORDEN DE COMPRA - NN SHOP MX* ⚜️\n`;
             message += `------------------------------------------\n`;
             message += `👤 ${nameText}\n\n`;
             message += `🛍️ *Detalle de Productos:*\n`;
-
             cart.forEach((item, i) => {
-                message += `${i+1}. *${item.name}*\n   ▫️ Talla: ${item.size}\n   ▫️ Precio: $${item.price}\n\n`;
+                message += `${i+1}. *${item.name}*\n   ▫️ Cantidad: ${item.qty}\n   ▫️ Talla: ${item.size}\n   ▫️ Subtotal: $${item.price * item.qty}\n\n`;
             });
-
-            const total = cart.reduce((acc, item) => acc + item.price, 0);
-            
+            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
             message += `------------------------------------------\n`;
             message += `💰 *TOTAL A PAGAR: $${total}*\n`;
             message += `------------------------------------------\n\n`;
             message += `📍 Quedo a la espera de los métodos de pago y confirmación de stock. ¡Gracias!`;
-            
             const encoded = encodeURIComponent(message);
             window.open(`https://wa.me/526442252598?text=${encoded}`, '_blank');
         }
@@ -852,15 +911,11 @@
         // CURSOR
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
-        
         window.addEventListener('mousemove', (e) => {
             if(cursorDot && cursorOutline && window.matchMedia("(pointer: fine)").matches) {
                 cursorDot.style.left = `${e.clientX}px`;
                 cursorDot.style.top = `${e.clientY}px`;
-                cursorOutline.animate({
-                    left: `${e.clientX}px`,
-                    top: `${e.clientY}px`
-                }, { duration: 500, fill: "forwards" });
+                cursorOutline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
             }
         });
 
