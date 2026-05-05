@@ -161,20 +161,21 @@
 
         /* --- HEADER --- */
         header {
-            height: 45vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
+            width: 100%;
+            background: var(--primary);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: white;
-            text-align: center;
         }
 
-        header h1 { font-family: 'Cinzel', serif; font-size: 3.5rem; margin-bottom: 10px; letter-spacing: 5px; }
-        header p { font-weight: 300; letter-spacing: 2px; text-transform: uppercase; }
+        .header-banner {
+            width: 100%;
+            max-width: 2048px;
+            height: auto;
+            aspect-ratio: 2048 / 878;
+            object-fit: cover;
+            display: block;
+        }
 
         /* --- FILTROS --- */
         .filters {
@@ -608,8 +609,7 @@
 
     <!-- Header -->
     <header>
-        <h1>NEW COLLECTION</h1>
-        <p>Elegancia Urbana & Estilo Atemporal</p>
+        <img src="img/BanNN.jpg" alt="NN SHOP MX - New Collection" class="header-banner">
     </header>
 
     <!-- Filtros -->
@@ -948,13 +948,13 @@
             message += `Quiero confirmar este pedido:\n\n`;
             
             cart.forEach((item) => {
-                message += `🧢 Producto: ${item.name}\n`;
-                message += `📏 Talla: ${item.size}\n`;
-                message += `🎨 Color: ${item.color || 'No especificado'}\n`;
-                message += `🔢 Cantidad: ${item.qty}\n\n`;
+                message += `Cap Producto: ${item.name}\n`;
+                message += `Ruler Talla: ${item.size}\n`;
+                message += `Artist Palette Color: ${item.color || 'No especificado'}\n`;
+                message += `Input Symbol for Numbers Cantidad: ${item.qty}\n\n`;
             });
             
-            message += `¿Me confirmas disponibilidad y precio final? 🙌`;
+            message += `¿Me confirmas disponibilidad y precio final? Hands Raised`;
             
             const encoded = encodeURIComponent(message);
             window.open(`https://wa.me/526442252598?text=${encoded}`, '_blank');
